@@ -6,33 +6,47 @@ namespace fakeopen
 {
 	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
-			if (args.Length != 0) { Hider(true); }
+			bool isHidden = false;
+			if (args.Length != 0)
+			{
+				Hider(true);
+				isHidden = true;
+			}
 			while (true)
 			{
 				try
 				{
 					if (args.Length != 0)
 					{
-						Process.Start(args[0]);
+						Start(args[0]);
 						break;
 					}
 					else
 					{
 						Console.Write("Path to program: ");
-						Process.Start(Console.ReadLine());
+						Start(Console.ReadLine());
 						break;
 					}
 				}
 				catch (Exception ex) 
 				{
-					Hider(false);
+					if (isHidden) Hider(false);
 					Console.WriteLine(ex.Message);
 					args = null;
 					continue;
 				}
 			}
+		}
+		/// <summary>
+		/// запуск следующей программы, и закрытие этой.
+		/// </summary>
+		/// <param name="process"></param>
+		private static void Start(string process)
+		{
+			Process.Start(process);
+			ExitProcess(0);
 		}
 
 		private static IntPtr hWnd;

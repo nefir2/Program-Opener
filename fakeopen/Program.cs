@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace fakeopen
 {
 	internal class Program
 	{
-		private static void Main(string[] args)
+		[STAThread] private static void Main(string[] args)
 		{
 			bool isHidden = false;
 			if (args.Length != 0)
@@ -25,8 +26,9 @@ namespace fakeopen
 					}
 					else
 					{
-						Console.Write("Path to program: ");
-						Start(Console.ReadLine());
+						OpenFileDialog ofd = new OpenFileDialog();
+						ofd.ShowDialog();
+						if (ofd.ShowDialog() == DialogResult.OK) Start(ofd.FileName);
 						break;
 					}
 				}

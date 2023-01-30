@@ -27,7 +27,6 @@ namespace fakeopen
 					else
 					{
 						OpenFileDialog ofd = new OpenFileDialog();
-						ofd.ShowDialog();
 						if (ofd.ShowDialog() == DialogResult.OK) Start(ofd.FileName);
 						break;
 					}

@@ -21,13 +21,20 @@ namespace fakeopen
 				{
 					if (!(args is null) && args.Length != 0)
 					{
-						Start(args[0]);
+						Start(GetFileAndArgs(args).ToTuple());
 						break;
 					}
 					else
 					{
-						OpenFileDialog ofd = new OpenFileDialog();
-						if (ofd.ShowDialog() == DialogResult.OK) Start(ofd.FileName);
+						OpenFileDialog ofd = new OpenFileDialog() { Multiselect = true, CheckFileExists = false, CheckPathExists = false };
+						if (ofd.ShowDialog() == DialogResult.OK)
+						{
+							foreach (var filename in ofd.SafeFileNames)
+							{
+								Console.WriteLine($"choosed: {filename}");
+							}
+							Start(GetFileAndArgs(ofd.SafeFileNames).ToTuple());
+						}
 						break;
 					}
 				}
@@ -48,6 +55,24 @@ namespace fakeopen
 		{
 			Process.Start(process);
 			ExitProcess(0);
+		}
+		/// <summary>
+		/// запуск следующей программы, и закрытие этой.
+		/// </summary>
+		/// <param name="process"></param>
+		private static void Start(string process, string args)
+		{
+			Process.Start(process, args);
+			ExitProcess(0);
+		}
+		private static void Start(Tuple<string, string> files) => Start(files.Item1, files.Item2);
+		private static (string process, string args) GetFileAndArgs(string[] FileNames)
+		{
+			string filename = FileNames[0];
+			string fileargs = "";
+			for (int i = 1; i < FileNames.Length; i++) fileargs += $" {FileNames[i]}";
+			fileargs.Trim(' ');
+			return (filename, fileargs);
 		}
 
 		private static IntPtr hWnd;

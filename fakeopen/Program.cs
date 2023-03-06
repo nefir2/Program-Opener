@@ -107,6 +107,7 @@ namespace fakeopen
 			if (hasEndLine) Console.WriteLine();
 		}
 
+		#region WINAPI
 		private static IntPtr hWnd;
 		//https://habr.com/ru/company/otus/blog/598409/?ysclid=lacmcadxbe475507780
 		[DllImport("user32.dll", SetLastError = true)][return: MarshalAs(UnmanagedType.Bool)] public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int uFlags);
@@ -129,5 +130,6 @@ namespace fakeopen
 			hWnd = GetConsoleWindow();
 			ShowWindow(hWnd, isHidden ? SW_HIDE : SW_SHOW);
 		}
+		#endregion
 	}
 }
